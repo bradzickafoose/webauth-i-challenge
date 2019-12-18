@@ -48,7 +48,7 @@ router.get('/logout', (req, res) => {
       if (error) {
         res.json({ message: "You were logged out" });
       } else {
-        res.json({ message: `Goodbye for now, ${username}!` });
+        res.json({ message: `Goodbye for now!` });
       }
     });
   }

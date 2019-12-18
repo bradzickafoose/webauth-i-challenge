@@ -7,6 +7,7 @@ const KnexSessionStore = require('connect-session-knex')(sessions);
 const authRouter = require('../auth/auth-router');
 const usersRouter = require('../users/users-router');
 const knex = require('../database/db-config');
+const restricted = require("../auth/restricted");
 
 const server = express();
 
@@ -42,7 +43,7 @@ server.use(express.json());
 server.use(cors());
 server.use(sessions(sessionConfiguration)); // add a req.session object
 server.use('/api/', authRouter);
-server.use('/api/users', usersRouter);
+server.use('/api/users', restricted, usersRouter);
 
 server.get('/', (req, res) => {
   res.status(200).send('Server is online');
