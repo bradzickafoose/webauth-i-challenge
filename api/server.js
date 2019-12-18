@@ -1,10 +1,12 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const sessions = require('express-session');
+const KnexSessionStore = require('connect-session-knex')(sessions);
 
 const authRouter = require('../auth/auth-router');
 const usersRouter = require('../users/users-router');
-const KnexSessionStore = require('connect-session-knex')(session);
+const knex = require('../database/db-config');
 
 const server = express();
 
@@ -18,7 +20,7 @@ const sessionConfiguration = {
   // how to store the sessions
   store: new KnexSessionStore({
     // DO NOT FORGET THE new KEYWORD
-    knex, // imported from dbConfig.js
+    knex, // imported from db-config.js
     createtable: true,
     clearInterval: 1000 * 60 * 10, // defaults to 6000
     sidfieldname: 'sid', // Name it whatever you want. Defaults to 'sid'

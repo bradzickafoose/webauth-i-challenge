@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const Users = require('../users/users-model');
 
-router.post('/register', (req, res) => {
+router.post('/register', validateRegistration, (req, res) => {
   // to hash a password
   const user = req.body;
 
@@ -41,5 +41,29 @@ router.post('/login', (req, res) => {
       res.status(500).json(error);
     });
 });
+
+router.get('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy(error => {
+      if (error) {
+        res.json({ message: "You were logged out" });
+      } else {
+        res.json({ message: `Goodbye for now, ${username}!` });
+      }
+    });
+  }
+});
+
+function validateRegistration(req, res, next) {
+  const user = req.body;
+
+  if (user && user.username && user.password) {
+    next();
+  } else {
+    res.status(400).json({
+      message: "A username and password is required to create an account"
+    });
+  }
+}
 
 module.exports = router;
